@@ -1,14 +1,26 @@
 #!/usr/bin/env bash
 
-# Settings
-quality="1%"
-upscale="200%"
-tmp_color="/tmp/tmp_color.jpg"
-tmp_alpha="/tmp/tmp_alpha.jpg"
-
 # Copy pack
 rm -rf scuffed_pack/
 cp -r ./default_pack/ scuffed_pack/
+
+## MAKE THE SOUND PACK ## 
+tmp_audio="/tmp/tmp_audio.ogg"
+bitrate="32k"
+sample_rate="8000"
+
+for sound in $(find scuffed_pack/ -type f -name "*.ogg"); do
+    echo $sound
+    ffmpeg -i $sound -c:a libvorbis -ab $bitrate -ar $sample_rate $tmp_audio -loglevel quiet
+    mv $tmp_audio $sound
+done
+
+
+## MAKE THE TEXTURE PACK ## 
+quality="7%"
+upscale="200%"
+tmp_color="/tmp/tmp_color.jpg"
+tmp_alpha="/tmp/tmp_alpha.jpg"
 
 # Exclude spectific paths
 rm -r scuffed_pack/assets/minecraft/textures/colormap/
